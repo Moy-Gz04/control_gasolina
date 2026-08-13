@@ -1,0 +1,93 @@
+<script>
+
+const token = localStorage.getItem('token');
+const area = localStorage.getItem('area');
+
+if(!token){
+    window.location.href = '../index.html';
+}
+
+if(area !== 'CTRL-VEH'){
+    window.location.href = '../index.html';
+}
+
+</script>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Registros — Control Vehicular</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/ssidebar.css">
+
+</head>
+
+<body>
+
+  <div id="sidebar-container"></div>
+
+  <div class="contenido">
+
+    <div class="topbar">
+      <div class="titulo-principal">CONTROL VEHICULAR</div>
+      <div class="subtitulo">REGISTROS GENERADOS</div>
+    </div>
+
+    <br>
+
+    <!-- BUSCADOR -->
+    <div style="width:90%; margin:0 auto 14px auto; display:flex; gap:8px;">
+      <input
+        type="text"
+        id="buscadorTexto"
+        placeholder="Buscar por código, persona o placas..."
+        style="flex:1; padding:10px 14px; border-radius:999px; border:1px solid #d8d8d8; font-size:12px; outline:none;"
+      >
+    </div>
+
+    <table id="tablaResultados">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Persona</th>
+          <th>Unidad (Placas)</th>
+          <th>No. Oficio</th>
+          <th>Comunidades</th>
+          <th>Km. Inicial</th>
+          <th>Km. Recorridos</th>
+          <th>Fecha</th>
+          <th>Documento</th>
+        </tr>
+      </thead>
+      <tbody id="tbodyResultados">
+        <tr>
+          <td colspan="9" style="text-align:center; padding:20px;">Cargando registros...</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- MODAL LOGOUT -->
+  <div class="modal" id="modalLogout">
+    <div class="modal-contenido">
+      <h2>¿Cerrar sesión?</h2>
+      <p>Se cerrará tu sesión actual.</p>
+      <div class="modal-botones">
+        <button type="button" class="btn-secundario" onclick="cerrarModal('modalLogout')">Cancelar</button>
+        <button type="button" class="btn-principal" id="confirmarLogout">Cerrar Sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/sidebar.js"></script>
+  <script src="../js/registros.js"></script>
+
+</body>
+</html>

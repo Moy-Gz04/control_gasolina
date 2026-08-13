@@ -1,0 +1,271 @@
+<script>
+
+const token = localStorage.getItem('token');
+const area = localStorage.getItem('area');
+
+if(!token){
+    window.location.href = '../index.html';
+}
+
+if(area !== 'CTRL-VEH'){
+    window.location.href = '../index.html';
+}
+
+</script>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Captura — Control Vehicular</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/ssidebar.css">
+
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar-container"></div>
+
+  <!-- CONTENIDO -->
+  <div class="contenido">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+
+      <div class="titulo-principal">
+        CONTROL VEHICULAR
+      </div>
+
+      <div class="subtitulo">
+        CAPTURA DE BITÁCORA DE USO DE VEHÍCULO
+      </div>
+
+    </div>
+
+    <!-- FORMULARIO -->
+    <form id="formulario">
+
+      <div class="contenedor">
+
+        <!-- PANEL IZQUIERDO: PERSONA Y UNIDAD (CATÁLOGO) -->
+        <div class="panel-izquierdo">
+
+          <!-- PERSONA -->
+          <div class="fila">
+            <label>Persona</label>
+            <div class="grupo-flex">
+              <select id="persona"></select>
+            </div>
+          </div>
+
+          <div class="fila">
+            <label>Nombre</label>
+            <input type="text" id="mostrarNombre" readonly placeholder="Se llena al elegir persona">
+          </div>
+
+          <div class="fila">
+            <label>Adscripción</label>
+            <input type="text" id="mostrarAdscripcion" readonly placeholder="Se llena al elegir persona">
+          </div>
+
+          <!-- UNIDAD -->
+          <div class="fila">
+            <label>Unidad (Placas)</label>
+            <div class="grupo-flex">
+              <select id="unidad"></select>
+            </div>
+          </div>
+
+          <div class="fila">
+            <label>Descripción Unidad</label>
+            <textarea id="mostrarConcat" readonly placeholder="Se llena al elegir unidad"></textarea>
+          </div>
+
+          <!-- FECHA -->
+          <div class="fila">
+            <label>Fecha</label>
+            <input type="date" id="fecha" name="fecha">
+          </div>
+
+        </div>
+
+        <!-- PANEL DERECHO -->
+        <div class="panel-derecho">
+
+          <!-- NO. DE OFICIO -->
+          <div class="fila">
+            <label>No. de Oficio</label>
+            <input type="text" id="oficio" placeholder="Ej. SEBISO/CV/045/2026">
+          </div>
+
+          <!-- ACTIVIDAD -->
+          <div class="fila">
+            <label>Actividad a Realizar</label>
+            <textarea id="actividad" placeholder="Describe la actividad realizada"></textarea>
+          </div>
+
+          <!-- COMUNIDADES -->
+          <div class="fila">
+            <label>Comunidades</label>
+            <textarea id="comunidades" placeholder="Comunidades visitadas"></textarea>
+          </div>
+
+          <!-- KILOMETRAJE ANTES DE USO -->
+          <div class="fila">
+            <label>Km. Antes de Uso</label>
+            <input type="number" id="kmInicial" min="0" step="1" placeholder="Ej. 45210">
+          </div>
+
+          <!-- IMAGEN DE TABLERO -->
+          <div class="fila">
+            <label>Imagen de Tablero</label>
+            <div class="campo-imagen">
+              <input type="file" id="imagenTablero" accept="image/*">
+              <img id="previewImagen" class="preview-imagen">
+            </div>
+          </div>
+
+          <!-- DISTANCIA / RUTAS -->
+          <div class="fila">
+            <label>Distancia</label>
+            <div class="rutas-contenedor" id="rutasContenedor">
+
+              <div class="ruta-item" data-ruta>
+                <div class="campo-mini">
+                  <span>Inicio</span>
+                  <input type="text" class="ruta-origen" placeholder="Lugar de inicio">
+                </div>
+                <div class="campo-mini">
+                  <span>Destino</span>
+                  <input type="text" class="ruta-destino" placeholder="Lugar de destino">
+                </div>
+                <div class="campo-mini">
+                  <span>Km</span>
+                  <input type="number" class="ruta-km" min="0" step="0.1" placeholder="Km">
+                </div>
+                <button type="button" class="btn-quitar-ruta" onclick="quitarRuta(this)">✕</button>
+              </div>
+
+            </div>
+          </div>
+
+          <button type="button" class="btn-agregar-ruta" id="btnAgregarRuta">
+            + Añadir Ruta
+          </button>
+
+          <!-- BOTÓN -->
+          <button type="button" id="btnEnviar">
+            GENERAR DOCUMENTO
+          </button>
+
+          <!-- LOADER -->
+          <div id="loader">
+            Generando documento...
+          </div>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
+  <!-- =========================
+     MODAL CONFIRMACIÓN
+  ========================= -->
+
+  <div class="modal" id="modalConfirmacion">
+    <div class="modal-contenido">
+      <h2>¿Generar el documento?</h2>
+      <p>Verifica que todos los datos capturados sean correctos.</p>
+      <div class="modal-botones">
+        <button type="button" class="btn-secundario" onclick="cerrarModal('modalConfirmacion')">
+          Cancelar
+        </button>
+        <button type="button" class="btn-principal" id="confirmarGeneracion">
+          Generar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+     MODAL CARGANDO
+  ========================= -->
+
+  <div class="modal" id="modalCarga">
+    <div class="modal-contenido modal-carga">
+      <h2>Generando documento...</h2>
+      <p>Espere un momento</p>
+      <div class="barra-carga">
+        <div class="barra-progreso"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+     MODAL ÉXITO
+  ========================= -->
+
+  <div class="modal" id="modalExito">
+    <div class="modal-contenido">
+      <h2>Documento generado correctamente</h2>
+      <p>El PDF ya está disponible en Registros.</p>
+      <div class="modal-botones">
+        <a href="#" id="linkDocumentoGenerado" target="_blank" class="btn-pdf" style="display:none;">Ver Documento</a>
+        <button type="button" class="btn-principal" onclick="cerrarModal('modalExito'); location.reload();">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+     MODAL ADVERTENCIA
+  ========================= -->
+
+  <div class="modal" id="modalAdvertencia">
+    <div class="modal-contenido">
+      <h2>⚠️ Atención</h2>
+      <p id="mensajeAdvertencia">Completa los campos requeridos</p>
+      <button type="button" class="btn-principal" onclick="cerrarModal('modalAdvertencia')">
+        Aceptar
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================
+     MODAL LOGOUT
+  ========================= -->
+
+  <div class="modal" id="modalLogout">
+    <div class="modal-contenido">
+      <h2>¿Cerrar sesión?</h2>
+      <p>Se cerrará tu sesión actual.</p>
+      <div class="modal-botones">
+        <button type="button" class="btn-secundario" onclick="cerrarModal('modalLogout')">
+          Cancelar
+        </button>
+        <button type="button" class="btn-principal" id="confirmarLogout">
+          Cerrar Sesión
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="overlay"></div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/catalogos.js"></script>
+  <script src="../js/sidebar.js"></script>
+  <script src="../js/captura.js"></script>
+
+</body>
+</html>
