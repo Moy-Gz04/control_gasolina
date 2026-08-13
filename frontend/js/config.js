@@ -5,7 +5,7 @@
    ============================================================ */
 
 /** URL base del backend (Render). Cámbiala por la tuya al desplegar. */
-const API = "https://TU-BACKEND.onrender.com";
+const API = "https://control-gasolina.onrender.com";
 
 /** Código de área/sistema. Debe coincidir con la columna "area"
  *  de la tabla usuarios y con el valor guardado en localStorage
@@ -17,4 +17,4 @@ const AREA = "CTRL-VEH";
  *  Se obtiene al hacer "Implementar > Nueva implementación > Aplicación web"
  *  en el proyecto de Apps Script (ver appscript/Script.gs). */
 const API_APPS_SCRIPT =
-"https://script.google.com/macros/s/TU_ID_DE_DESPLIEGUE/exec";
+"https://script.google.com/macros/s/AKfycbyUBIWtNBvlB9lMvGMStKzbzOo-KuTff95-nTxO0C7xsgnMlSkK2BvNqamnctLFmCzt/exec";
