@@ -17,4 +17,4 @@ const AREA = "CTRL-VEH";
  *  Se obtiene al hacer "Implementar > Nueva implementación > Aplicación web"
  *  en el proyecto de Apps Script (ver appscript/Script.gs). */
 const API_APPS_SCRIPT =
-"https://script.google.com/macros/s/AKfycby6rWva8Ri4kqPk7qs5u_kw00WQeyZr4lLc9hBZs9l9IL5I93BLVRWOU5zGL4g3upb4/exec";
+"https://script.google.com/macros/s/AKfycbyMHbbMu1HTyUZCrb8zN5KuK0uSRZZ4Jb0VQYbApBQiXoQBL5xW4WLjTpGdC7o4C2EP/exec";
